@@ -9,6 +9,7 @@
   - Authentication
   - Active Scanning
   - Alerts
+  - Fuzzing
 - Learn about ZAP's script engine
   - Creating a custom `httpsender` script
   - Creating a `standalone` script which uses selinium to automate some browser interactions
@@ -22,6 +23,7 @@ this tutorial we will be assumming you are running Juice Shop in docker `localho
 with your url.
 
 ## Requirements
+- Awareness of [OWASP Top 10](https://www.owasp.org/index.php/OWASP_Top_Ten_Cheat_Sheet#OWASP_Top_Ten_Cheat_Sheet)
 - docker
 - OWASP ZAP (Weekly build)
 
@@ -267,12 +269,33 @@ http://localhost:3000/#/search?q=%3Cscript%3Ealert(%22XSS%22)%3C%2Fscript%3E
 
 
 ### Challenge - Zero Stars
-*Give a devastating zero-star feedback to the store.*   
+*Give a devastating zero-star feedback to the store.*     
+
+One of the pages we discovered is a contact page with the option to leave a rating 
+(`http://localhost:3000/#/contact`). With this challenge, the goal is to leave feedback of zero-stores. There is no option for 0-stars presented by the interface, if you don't select at least one star you can't submit. So try to use ZAP to work around this, let's go back to the form and fill it out but don't submit.
+Before we submit, let's go back into ZAP and toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `POST http://localhost:3000/api/Feedbacks/` and also the request body `{"comment":"Comment?","rating":1,"captcha":"11","captchaId":9}`. Let's go ahead and replace the `rating` value of `1` with  `0`. Now press the blue arrow key :arrow_forward: to *Submit and contoinue to the next break point*. If you did everything correctly, in the response you should see `{"status":"success" ... "rating":0, ...}`
 
 
-### Challenge - Five-Star Feedback
-*Get rid of all 5-star customer feedback.*   
+```python
+from zapv2 import ZAPv2
+import requests
+import json
 
+zap = ZAPv2()
+proxy = zap._ZAPv2__proxies
+root = "http://localhost:3000"
+headers = {'Content-type': 'application/json'}
+
+captcha = requests.get("%s/rest/captcha/" % root, proxies=proxy, verify=False, headers=headers).json()
+print(captcha)
+data = requests.post("%s/api/Feedbacks/" % root, headers=headers, proxies=proxy, verify=False, data=json.dumps({
+  "comment":"Comment?",
+  "rating":0,
+  "captcha":captcha["answer"],
+  "captchaId":captcha["captchaId"]
+})).json()
+print(data)
+```
 
 #### Challenge - Basket Access
 *Access someone else's basket.*  
@@ -281,9 +304,34 @@ After you login, Click the **Your Basket** link or navigate to `http://localhost
 you should notice a request `http://localhost:3000/rest/basket/4` ... *Right Click* (or ^ click for Mac) on the request and a context menu will pop up and then click `Open/Resend with Request editor`. Looking at the request, it looks REST ish with `4` likely the user id from the database. Let's goahead and try changing that number to a lower one & see if we get another basket and then click *Send*. Sure enough we can access someone elses basket! Let's see how many other baskets have content. Incrementally manually is a bothersome, let's check out ZAP's **HTTP Fuzzer** to make this easy! Let's exit the `Request editor` back into the main ZAP ui. Lets go ahead and find the `rest/basket/...` request again in history and click it. In the **&rarr;Request** tab above select the numbrer at the end of the path and then *Right Click*  on the selection. This will prompt you with another context menu with one of the options being **Fuzz**, which you 
 need to click. This will bring up the **Fuzzer** dialog with which you can set options. ON the right side you will want to *Click* the button **Payloads**, this will allow you to provide a list of values to replace the seleted text with. Now *click* **Add** which will bring up another prompt. In the dropdown, select **Numberzz** (since we are iterating numbers) and then for the **To** field set a value of `20` and the increment field a value of `1`. After you add those settings, *click* the button **Generate Preview** and then *click* the button **Add** then **Ok**. After that you will be back in the main **Fuzzer** dialog, goahead and *click* **Start Fuzzer**. Below you'll see the **Fuzzer** tab is in focus with a list of requests. 
 
+```python
+from zapv2 import ZAPv2
+
+zap = ZAPv2()
+zap.urlopen("%s/rest/basket/1" % root)
+zap.urlopen("%s/rest/basket/2" % root)
+```
+
+### Challenge - Five-Star Feedback
+*Get rid of all 5-star customer feedback.*  
+
+So we already created a 0-star review, but how can we get rid of the existing 5 stars? Earlier, when 
+you found `http://localhost:3000/#/administration`, you may have noticed the right column had a table 
+with **Customer Feedback**. If you are logged in with your test user, you'll notice there is a red trash can icon on the right side of each table row. (if you are not logged in, go ahead and log in). Go ahead and click the trash icon next to the first review that has 5-stars. Back in ZAP, checking the **History** tab at the bottom and notice the requests, there is a new one - `DELETE http://localhost:3000/api/Feedbacks/1`!
+No sort of authorization check was performed, as a authenitcated user you were able to 
+
+```python
+import requests
+from zapv2 import ZAPv2
+
+zap = ZAPv2()
+proxy = zap._ZAPv2__proxies
+root = "http://localhost:3000"
+requests.delete("%s/api/Feedbacks/1" % root, proxies=proxy, verify=False)
+```
 #### Breakppints
 Let's go back to the list of products, `http://localhost:3000/#/search`. If you click the eye icon to the 
-right of a product entry, a dialog will pop up. In that dialg you can `Add a review for this product` and submit! Let's go ahead and fill it out with `Awesome!`. Before we submit, let's go back into ZAP and toggle the icon to "Break on all requests". Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and also the request body `{"message":"Awesome!","author":"Anonymous"}`. Let's go ahead and replace the message attribute with  `<script>alert(\"XSS\")</script>`. Now press the blue arrow key to *Submit and contoinue to the next break point*
+right of a product entry, a dialog will pop up. In that dialg you can `Add a review for this product` and submit! Let's go ahead and fill it out with `Awesome!`. Before we submit, let's go back into ZAP and toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and also the request body `{"message":"Awesome!","author":"Anonymous"}`. Let's go ahead and replace the message attribute with  `<script>alert(\"XSS\")</script>`. Now press the blue arrow key to *Submit and contoinue to the next break point*
 
 
 ```js
