@@ -151,7 +151,7 @@ var COOKIE_TYPE   = org.parosproxy.paros.network.HtmlParameter.Type.cookie;
 function sendingRequest(msg, initiator, helper) {  
   if (initiator === HttpSender.AUTHENTICATION_INITIATOR) {
     logger("Trying to auth")
-	return msg;
+  return msg;
   }
 
   var token = ScriptVars.getGlobalVar("jwt-token")
@@ -179,7 +179,7 @@ function responseReceived(msg, initiator, helper) {
        
      if (cookies.contains(cookie)) {return;}
      msg.getResponseHeader().setHeader('Set-Cookie', 'token=' + token + '; Path=/;');
-	return;
+  return;
   }
 
   logger("Handling auth response")
@@ -198,7 +198,7 @@ function responseReceived(msg, initiator, helper) {
   
   // If auth request was not succesful move on
   if (!data['authentication']) {return;}
-	
+  
   // @todo abstract away to be configureable
   var token = data["authentication"]["token"]
   logger("Capturing token for JWT\n" + token)
@@ -300,7 +300,7 @@ var Thread            = Java.type('java.lang.Thread');
 var WebDriver         = Java.type('org.openqa.selenium.WebDriver');
 
 function getAll(re, body) {
-	var match;
+  var match;
   var matches = []; 
   do {
     match = re.exec(body);
@@ -348,7 +348,7 @@ function invokeWith(msg) {
 
   for (var i in links) {
     driver.get(links[i]);
-	  Thread.sleep(1000);
+    Thread.sleep(1000);
   }
 
   driver.quit();
