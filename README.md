@@ -241,3 +241,93 @@ completing the following challenges to give you a good understanding of how to a
 - Basket Access
 - Five-Star Feedback
 
+#### Admin Section
+*Access the administration section of the store.* This first challenge is straightforward! At the bottom of 
+ZAP panel there is a tab for **Search** - go ahead and search for `administration`. The first result in 
+the list is `juice-shop.min.js` which will highlight part of `AdministrationController`. If you press **Next** a couple times you'll find the string `e.when("/administration" ...`. On of the ways 
+angularjs registers routes is using a module called the `$routeProvider` which provides the `when` function
+for adding routes. (Example)[https://scotch.io/tutorials/single-page-apps-with-angularjs-routing-and-templating]
+Using this insight, let's go ahead and navigate to `http://localhost:3000/#/administration` and check out what's there!
+
+#### XSS Tier 0
+
+`http://localhost:3000/#/track-result?id=%3Cscript%3Ealert(%22XSS%22)%3C%2Fscript%3E`
+
+#### Basket Access
+After you login, Click the **Your Basket** link or navigate to `http://localhost:3000/#/basket`. Back in ZAP
+you should notice a request `http://localhost:3000/rest/basket/4` ... *Right Click* (or ^ click for Mac) on the request and a context menu will pop up and then click `Open/Resend with Request editor`. Looking at the request, it looks REST ish with `4` likely the user id from the database. Let's goahead and try changing that number to a lower one & see if we get another basket and then click *Send*. Sure enough we can access someone elses basket! Let's see how many other baskets have content. Incrementally manually is a bothersome, let's check out ZAP's **HTTP Fuzzer** to make this easy! Let's exit the `Request editor` back into the main ZAP ui. Lets go ahead and find the `rest/basket/...` request again in history and click it. In the **&rarr;Request** tab above select the numbrer at the end of the path and then *Right Click*  on the selection. This will prompt you with another context menu with one of the options being **Fuzz**, which you 
+need to click. This will bring up the **Fuzzer** dialog with which you can set options. ON the right side you will want to *Click* the button **Payloads**, this will allow you to provide a list of values to replace the seleted text with. Now *click* **Add** which will bring up another prompt. In the dropdown, select **Numberzz** (since we are iterating numbers) and then for the **To** field set a value of `20` and the increment field a value of `1`. After you add those settings, *click* the button **Generate Preview** and then *click* the button **Add** then **Ok**. After that you will be back in the main **Fuzzer** dialog, goahead and *click* **Start Fuzzer**. Below you'll see the **Fuzzer** tab is in focus with a list of requests. 
+
+#### Breakppints
+Let's go back to the list of products, `http://localhost:3000/#/search`. If you click the eye icon to the 
+right of a product entry, a dialog will pop up. In that dialg you can `Add a review for this product` and submit! Let's go ahead and fill it out with `Awesome!`. Before we submit, let's go back into ZAP and toggle the icon to "Break on all requests". Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and also the request body `{"message":"Awesome!","author":"Anonymous"}`. Let's go ahead and replace the message attribute with  `<script>alert(\"XSS\")</script>`. Now press the blue arrow key to *Submit and contoinue to the next break point*
+
+
+```js
+if (typeof println == 'undefined') this.println = print;
+
+// Logging with the script name is super helpful!
+function logger() {
+  print('[' + this['zap.script.name'] + '] ' + arguments[0]);
+}
+
+var Control           = Java.type('org.parosproxy.paros.control.Control')
+var ExtensionSelenium = Java.type('org.zaproxy.zap.extension.selenium.ExtensionSelenium');
+var Thread            = Java.type('java.lang.Thread');
+var WebDriver         = Java.type('org.openqa.selenium.WebDriver');
+
+function getAll(re, body) {
+	var match;
+  var matches = []; 
+  do {
+    match = re.exec(body);
+    if (match) {
+        matches.push(match);
+    }
+  } while (match);
+  return matches;
+}
+
+function invokeWith(msg) {
+  var selenium = Control.getSingleton().getExtensionLoader().getExtension(ExtensionSelenium.class);
+  var driver   = selenium.getWebDriverProxyingViaZAP(1, 'firefox');
+  var url = msg.getRequestHeader().getURI();
+  var root = url.getScheme() + '://' + url.getHost();
+  if (url.getPort() != 80 && url.getPort() != 443) {
+    root += ':' + url.getPort();
+  }
+  var body = msg.getResponseBody().toString();
+  // For capturing angular.js router urls
+  var regexWhen = /\.when\(["']([^"']+)["']/g;
+  // For capturing angular.js AJAX requests
+  var regexGet = /\.get\(["']([^"']+)["']/g;
+
+  var matches = getAll(regexWhen, body);
+  var links = []
+
+  for (var i in matches) {
+    var link = root + '/#' +  matches[i][1];
+    if (links.indexOf(link) !== -1) {
+      continue;
+    }
+    links.push(link);
+  }
+     
+  matches = getAll(regexGet, body);
+
+  for (var i in matches) {
+    var link = root +  matches[i][1];
+    if (links.indexOf(link) !== -1) {
+      continue;
+    }
+    links.push(link);
+  }
+
+  for (var i in links) {
+    driver.get(links[i]);
+	  Thread.sleep(1000);
+  }
+
+  driver.quit();
+}
+```
