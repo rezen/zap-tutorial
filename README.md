@@ -74,7 +74,7 @@ So the question becomes, how do you crawl applications that are primarily render
 
 #### AJAX Spider
 To kick off the AJAX Spider, let's go back to the **Sites** tab and then right click on the request labeled `http://localhost:3000`. 
-In the menu that popped up click Attack > AJAX Spider. This will prompt a dialog to appear with which you can configure the scan. Select 
+In the menu that popped up click `Attack > AJAX Spider`. This will prompt a dialog to appear with which you can configure the scan. Select 
 the context. Start with selecting Firefox as the browser, then check the option **Show Advanced Options** and another tab **Options** will appear in the dialog. 
 Go ahead and set *Number of Browser Windows to Open* to 2 and set *Maximum Duration* to 5. Now go ahead and click *Start Scan* to kicks things off.
 In the bottom portion of ZAP, you will see a scrolling list being updated with new requests being tracked from the browser. If you switch to 
@@ -109,7 +109,7 @@ attributes.
 Exit the context editor and go back to the request, you will notice in the response headers there is no set cookie. In the response body you will
 find the response data. 
 
-```
+```json
 {"authentication":{"token":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6OSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicGFzc3dvcmQiOiIwNWE2NzFjNjZhZWZlYTEyNGNjMDhiNzZlYTZkMzBiYiIsImNyZWF0ZWRBdCI6IjIwMTgtMTAtMjkgMjI6MjM6MDIuODQwICswMDowMCIsInVwZGF0ZWRBdCI6IjIwMTgtMTAtMjkgMjI6MjM6MDIuODQwICswMDowMCJ9LCJpYXQiOjE1NDA4NTE5ODksImV4cCI6MTU0MDg2OTk4OX0.Xw-5Kz4PPgAus2Pij1SsQl7dbUfufP8i_KN2So1MQyI5TCh9u1BdDrpmpyccxM6JAp5YWPgESJj6mjInr5lsGAOcIJyH_paBb9f3o5KO2KyLdzFrYWd7fMWfCNeQeGBakUcNTU0JnzUl8QxZBTbfIYG4QOPWaPlSJo5rEN5lB1o","bid":4,"umail":"test@test.com"}}
 ```
  
@@ -228,4 +228,16 @@ So let's use the same setting we used earlier from the AJAX Spider [Settings](#A
 notice the user is logged in! (Logout & Your Basket links visible). Now the AJAX Spider will pick up some new paths that it couldn't find before!
 
 
-### Scoreboard
+### Challenges
+*If you've never done Juice Shop be, warned, this section will give away answers for the easy section*
+Now that we've covered some of the foundational aspects of ZAP, let's take some time to focus on Juice Shop, and then figure out how best to automate testing of Juice Shop. If you visit `http://localhost:3000/#/score-board`, you can see the list of challenges. At this point you 
+should have solved ~3 challenges as a matter of following the previous steps! Our goal is to script 
+completing the following challenges to give you a good understanding of how to automate different scenarios.
+
+- Admin Section
+- XSS Tier 0
+- XSS Tier 1
+- Zero Stars
+- Basket Access
+- Five-Star Feedback
+
