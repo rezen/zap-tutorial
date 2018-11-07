@@ -229,7 +229,7 @@ notice the user is logged in! (Logout & Your Basket links visible). Now the AJAX
 
 
 ### Challenges
-*If you've never done Juice Shop be, warned, this section will give away answers for the easy section*
+*If you've never done Juice Shop be, warned, this section will give away answers for the easy section*  
 Now that we've covered some of the foundational aspects of ZAP, let's take some time to focus on Juice Shop, and then figure out how best to automate testing of Juice Shop. If you visit `http://localhost:3000/#/score-board`, you can see the list of challenges. At this point you 
 should have solved ~3 challenges as a matter of following the previous steps! Our goal is to script 
 completing the following challenges to give you a good understanding of how to automate different scenarios.
@@ -241,19 +241,42 @@ completing the following challenges to give you a good understanding of how to a
 - Basket Access
 - Five-Star Feedback
 
-#### Admin Section
-*Access the administration section of the store.* This first challenge is straightforward! At the bottom of 
-ZAP panel there is a tab for **Search** - go ahead and search for `administration`. The first result in 
+#### Challenge - Admin Section
+*Access the administration section of the store.*  
+At the bottom of  ZAP panel there is a tab for **Search** - go ahead and search for `administration`. The first result in 
 the list is `juice-shop.min.js` which will highlight part of `AdministrationController`. If you press **Next** a couple times you'll find the string `e.when("/administration" ...`. On of the ways 
 angularjs registers routes is using a module called the `$routeProvider` which provides the `when` function
-for adding routes. (Example)[https://scotch.io/tutorials/single-page-apps-with-angularjs-routing-and-templating]
+for adding routes. [Example Routing](https://scotch.io/tutorials/single-page-apps-with-angularjs-routing-and-templating)
 Using this insight, let's go ahead and navigate to `http://localhost:3000/#/administration` and check out what's there!
 
-#### XSS Tier 0
+
+
+#### Challenge XSS Tier 0
+*Perform a reflected XSS attack with `<script>alert("XSS")</script>`.*  
+
+https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
 
 `http://localhost:3000/#/track-result?id=%3Cscript%3Ealert(%22XSS%22)%3C%2Fscript%3E`
 
-#### Basket Access
+
+#### Challenge XSS Tier 1
+*Perform a DOM XSS attack with `<script>alert("XSS")</script>`.*  
+https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
+
+http://localhost:3000/#/search?q=%3Cscript%3Ealert(%22XSS%22)%3C%2Fscript%3E
+
+
+### Challenge - Zero Stars
+*Give a devastating zero-star feedback to the store.*   
+
+
+### Challenge - Five-Star Feedback
+*Get rid of all 5-star customer feedback.*   
+
+
+#### Challenge - Basket Access
+*Access someone else's basket.*  
+
 After you login, Click the **Your Basket** link or navigate to `http://localhost:3000/#/basket`. Back in ZAP
 you should notice a request `http://localhost:3000/rest/basket/4` ... *Right Click* (or ^ click for Mac) on the request and a context menu will pop up and then click `Open/Resend with Request editor`. Looking at the request, it looks REST ish with `4` likely the user id from the database. Let's goahead and try changing that number to a lower one & see if we get another basket and then click *Send*. Sure enough we can access someone elses basket! Let's see how many other baskets have content. Incrementally manually is a bothersome, let's check out ZAP's **HTTP Fuzzer** to make this easy! Let's exit the `Request editor` back into the main ZAP ui. Lets go ahead and find the `rest/basket/...` request again in history and click it. In the **&rarr;Request** tab above select the numbrer at the end of the path and then *Right Click*  on the selection. This will prompt you with another context menu with one of the options being **Fuzz**, which you 
 need to click. This will bring up the **Fuzzer** dialog with which you can set options. ON the right side you will want to *Click* the button **Payloads**, this will allow you to provide a list of values to replace the seleted text with. Now *click* **Add** which will bring up another prompt. In the dropdown, select **Numberzz** (since we are iterating numbers) and then for the **To** field set a value of `20` and the increment field a value of `1`. After you add those settings, *click* the button **Generate Preview** and then *click* the button **Add** then **Ok**. After that you will be back in the main **Fuzzer** dialog, goahead and *click* **Start Fuzzer**. Below you'll see the **Fuzzer** tab is in focus with a list of requests. 
