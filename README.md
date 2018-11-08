@@ -181,7 +181,7 @@ function responseReceived(msg, initiator, helper) {
        
      if (cookies.contains(cookie)) {return;}
      msg.getResponseHeader().setHeader('Set-Cookie', 'token=' + token + '; Path=/;');
-  return;
+     return;
   }
 
   logger("Handling auth response")
@@ -277,11 +277,6 @@ Before we submit, let's go back into ZAP and toggle the circular record button (
 
 
 ```python
-from zapv2 import ZAPv2
-import requests
-import json
-
-zap = ZAPv2()
 proxy = zap._ZAPv2__proxies
 root = "http://localhost:3000"
 headers = {'Content-type': 'application/json'}
@@ -302,9 +297,6 @@ you should notice a request `http://localhost:3000/rest/basket/4` ... *Right Cli
 need to click. This will bring up the **Fuzzer** dialog with which you can set options. ON the right side you will want to *Click* the button **Payloads**, this will allow you to provide a list of values to replace the seleted text with. Now *click* **Add** which will bring up another prompt. In the dropdown, select **Numberzz** (since we are iterating numbers) and then for the **To** field set a value of `20` and the increment field a value of `1`. After you add those settings, *click* the button **Generate Preview** and then *click* the button **Add** then **Ok**. After that you will be back in the main **Fuzzer** dialog, goahead and *click* **Start Fuzzer**. Below you'll see the **Fuzzer** tab is in focus with a list of requests. 
 
 ```python
-from zapv2 import ZAPv2
-
-zap = ZAPv2()
 zap.urlopen("%s/rest/basket/1" % root)
 zap.urlopen("%s/rest/basket/2" % root)
 ```
@@ -328,7 +320,14 @@ requests.delete("%s/api/Feedbacks/1" % root, proxies=proxy, verify=False)
 ```
 #### Breakpoints
 Let's go back to the list of products, `http://localhost:3000/#/search`. If you click the eye icon to the 
-right of a product entry, a dialog will pop up. In that dialg you can `Add a review for this product` and submit! Let's go ahead and fill it out with `Awesome!`. Before we submit, let's go back into ZAP and toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and also the request body `{"message":"Awesome!","author":"Anonymous"}`. Let's go ahead and replace the message attribute with  `<script>alert(\"XSS\")</script>`. Now press the blue arrow key to *Submit and contoinue to the next break point*
+right of a product entry, a dialog will pop up. In that dialg you can `Add a review for this product` 
+and submit! Let's go ahead and fill it out with `Awesome!`. Before we submit, let's go back into ZAP and 
+toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in
+the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should 
+see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and also the request body 
+`{"message":"Awesome!","author":"Anonymous"}`. Let's go ahead and replace the message attribute with  
+`<script>alert(\"XSS\")</script>`. Now press the blue arrow key to *Submit and continue to the next  break point*
+
 
 
 ```js
