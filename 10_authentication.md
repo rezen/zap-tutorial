@@ -24,6 +24,9 @@ and in the context menu that prompted click, Right click (or control click) `Fla
 the authentication information as well as a couple parameters for selecting Username & Password. Go ahead and set the username and password parameters to the correspending JSON
 attributes.
 
+![Authorization Header](assets/images/zap-gui-flag-as-login.jpg)
+
+
 Exit the context editor and go back to the request, you will notice in the response headers there is no set cookie. In the response body you will
 find the response data. 
 
@@ -39,6 +42,8 @@ find the response data.
  
 
 The request that follows is `GET http://localhost:3000/rest/user/whoami` which you will notice has a header called `Authorization` which uses the token from the response body of the login request. In body if the response, you should see some info about your user.`{"user":{"id":9,"email":"test@test.com"}}`.  If you visit that url directly, with your browser, the content of the page is `{"user":{}}` - the Authorization header is not added to request and there is not authenticated.
+
+![Authorization Header](assets/images/zap-gui-header.jpg)
 
 ```
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6OSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicGFzc3dvcmQiOiIwNWE2NzFjNjZhZWZlYTEyNGNjMDhiNzZlYTZkMzBiYiIsImNyZWF0ZWRBdCI6IjIwMTgtMTAtMjkgMjI6MjM6MDIuODQwICswMDowMCIsInVwZGF0ZWRBdCI6IjIwMTgtMTAtMjkgMjI6MjM6MDIuODQwICswMDowMCJ9LCJpYXQiOjE1NDA4NTE5ODksImV4cCI6MTU0MDg2OTk4OX0.Xw-5Kz4PPgAus2Pij1SsQl7dbUfufP8i_KN2So1MQyI5TCh9u1BdDrpmpyccxM6JAp5YWPgESJj6mjInr5lsGAOcIJyH_paBb9f3o5KO2KyLdzFrYWd7fMWfCNeQeGBakUcNTU0JnzUl8QxZBTbfIYG4QOPWaPlSJo5rEN5lB1o
