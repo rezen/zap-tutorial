@@ -1,19 +1,20 @@
 # GUI Overview
 We are going to touch on the basics of the GUI to help you get more familiar with ZAP. Below you can see the GUI with 4 panels highlighted with more details below!
 
-![alt text](assets/images/zap-gui-main.jpg "Logo Title Text 1")
+![Main overview](assets/images/zap-gui-main.jpg)
 
 - [1 Workspace](#panel-1-workspace)
 - [2 Sidebar](#panel-2-sidebar)
 - [3 Tools](#panel-3-tools)
 - [4 Toolbar](#panel-4-toolbar)
 
-## Panel 1 Workspace
+## Panel 1 Main Workspace
 This panel enables you to view **Request** & **Response** headers and body. When you look at requests from **History** or from **Sites** the details are displayed in this section. or There is is also the **Script Panel** that allows you to modify/run/save your scripts and view any output from the scripts. 
 
 
 
 ## Panel 2 Sidebar
+![Panel 2](assets/images/zap-gui-panel-2.jpg)
 ### Sites
 
 #### Contexts
@@ -27,6 +28,8 @@ ZAP has a powerful scripting engine that allows you to modify/enhance different 
 
 ## Panel 3 Tools
 ZAP has tools that help you analyze your application
+
+![Panel 3](assets/images/zap-gui-panel-3.jpg)
 
 - History
 - Search 
@@ -53,7 +56,7 @@ ZAP has tools that help you analyze your application
 ## Panel 4 Toolbar
 The toolbar has a number of buttons to affects settings or the interface but I'm only going to touch on the aspects that are most commonly used. Over time we'll add more buttons!
 
-![alt text](assets/images/zap-toolbar.png "Logo Title Text 1")
+![Panel 4](assets/images/zap-toolbar.png)
 
 ### Button 1 - Options
 All the detailed options for ZAPs functionality are found here! For example, if you want to set the default Maximum Duration a spider runs for, you set that in the **Options** panel
