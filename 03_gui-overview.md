@@ -14,7 +14,7 @@ This panel enables you to view **Request** & **Response** headers and body. When
 
 
 ## Panel 2 Sidebar
-<img src="https://raw.githubusercontent.com/rezen/zap-tutorial/master/assets/images/zap-gui-panel-2.jpg" style="max-width:300px;" />
+<img src="https://raw.githubusercontent.com/rezen/zap-tutorial/master/assets/images/zap-gui-panel-2.jpg" width="300" />
 
 ### Sites
 
