@@ -34,6 +34,8 @@ the browser that started you can see ZAP interacting with the application. It do
 have been discovered. In the **Sites** tab if you drill down into some of the urls such as `rest`, you will notice all these pages have a red spider icon 
 next to them, indicating they were found by the AJAX Spider.
 
+![Spider Adanced](assets/images/zap-gui-start-ajax-spider.gif)
+
 
 #### Active Scan
 The spidering we've run have checked the application in non-intrusive ways. The Active Scan functionality of ZAP 
