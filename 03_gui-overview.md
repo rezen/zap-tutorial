@@ -11,6 +11,8 @@ We are going to touch on the basics of the GUI to help you get more familiar wit
 ## Panel 1 Main Workspace
 This panel enables you to view **Request** & **Response** headers and body. When you look at requests from **History** or from **Sites** the details are displayed in this section. or There is is also the **Script Panel** that allows you to modify/run/save your scripts and view any output from the scripts. 
 
+![Panel 1](assets/images/zap-gui-panel-1.jpg)
+
 
 
 ## Panel 2 Sidebar
