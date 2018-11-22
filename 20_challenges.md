@@ -1,7 +1,14 @@
 
 # Challenges
+
+![Juice Shop](assets/images/juice-shop-main.png)
+
 *If you've never done Juice Shop be, warned, this section will give away answers for the easy section*  
-Now that we've covered some of the foundational aspects of ZAP, let's take some time to focus on Juice Shop, and then figure out how best to automate testing of Juice Shop. If you visit `http://localhost:3000/#/score-board`, you can see the list of challenges. At this point you 
+Now that we've covered some of the foundational aspects of ZAP, let's take some time to focus on Juice Shop, and then figure out how best to automate testing of Juice Shop. 
+
+![Juice Shop Scoreboard](assets/images/juice-shop-score-board.png)
+
+If you visit `http://localhost:3000/#/score-board`, you can see the list of challenges. At this point you 
 should have solved ~3 challenges as a matter of following the previous steps! Our goal is to script 
 completing the following challenges to give you a good understanding of how to automate different scenarios.
 
