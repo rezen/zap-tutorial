@@ -37,6 +37,11 @@ docker exec $(docker ps | grep 'juice-shop' | cut -d ' ' -f1) \
   find -name 'access.log*' -exec cat {} \;\
   | grep POST
 ```
+
+![Screenshot logs](assets/images/screenshot-grep-logs.png)
+
+
+
 You'll notice there has been none - this is a massive gap in the attack surface. Tradionally, security scanners can read the HTML body and 
 identify forms which are submitted and then testing with malicious payload. In this instance, that sort of model does not work. Esentially
 the entire application is rendered in the browser, with non-traditional forms and ways of interacting with the server with a REST model.
