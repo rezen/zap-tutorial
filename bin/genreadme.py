@@ -1,16 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Generate README based on numbered markdown files."""
+""" Generate README based on numbered markdown files. """
 from __future__ import unicode_literals
-import json  # noqa: F401
+import json
 from glob import iglob
 import re
 
 preamble = """
-# Andres smells
+# ZAP Tutorial
 
 """.lstrip()
-
 
 toc = []
 for idx, i in enumerate(sorted(iglob('*.md'))):
@@ -20,8 +18,8 @@ for idx, i in enumerate(sorted(iglob('*.md'))):
         continue
     v.pop(-1)
     title = ' '.join(v).title()
-    url = './{}'.format(i)
-    toc.append('## [{}]({})'.format(title, url))
+    url = '{}'.format(i)
+    toc.append('- [{}]({})'.format(title, url))
 
 output = '\n'.join([preamble] + toc)
 print(output)
