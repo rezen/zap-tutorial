@@ -24,7 +24,7 @@ and in the context menu that prompted click, Right click (or control click) `Fla
 the authentication information as well as a couple parameters for selecting Username & Password. Go ahead and set the username and password parameters to the correspending JSON
 attributes.
 
-![Authorization Header](assets/images/zap-gui-flag-as-login.jpg)
+![Add Authentication to Context](assets/images/zap-auth-context.gif)
 
 
 Exit the context editor and go back to the request, you will notice in the response headers there is no set cookie. In the response body you will
@@ -135,6 +135,9 @@ function responseReceived(msg, initiator, helper) {
 
 ```
 (Another time we'll cover just the scripting aspect of ZAP)
+
+![Adding Script](assets/images/zap-add-script.gif)
+
 
 Now that we have that script setup, let's test it out! Go ahead and visit the login page `http://localhost:3000/#/login` with the browser launched with ZAP and use your test account to login. After you login, back in ZAP in the **Script Console** tab you should see a message that says.
 
