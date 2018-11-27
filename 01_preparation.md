@@ -11,7 +11,11 @@ If you want follow along you'll need the
 - python
 - selenium
 
+### Installing ZAP
+Getting ZAP installed is pretty straight forward, download the appropriate [installer](https://github.com/zaproxy/zaproxy/wiki/Downloads) for your OS and install!
 
+- [Youtube - Linux Install ](https://www.youtube.com/watch?v=MpuFW_mkJ3M)
+- [Windows - Chocolately Package](https://chocolatey.org/packages/zap)
 
 ### Juice Shop
 You will need need to a running instance of [OWASP Juice Shop](https://github.com/bkimminich/juice-shop). I recommend running

@@ -39,3 +39,8 @@ The end goal of this excersize is go use the ZAP GUI to setup the basic configur
 We'll touch on some gotchas with the scans and use the ZAP hooks to configure and enhance the scans. Throughout 
 this tutorial we will be assumming you are running Juice Shop in docker `localhost:3000` but if not, substitute the URL
 with your url.
+
+**Links**
+[ZAP Wiki Introduction](https://github.com/zaproxy/zaproxy/wiki/Introduction)
+[ZAP Wiki Videos](https://github.com/zaproxy/zaproxy/wiki/Videos)
+[Pluralsight Lesson](https://www.pluralsight.com/courses/owasp-zap-web-app-pentesting-getting-started)

@@ -7,6 +7,10 @@ Once we have the context setup, we can go ahead and test the spider out. Let's g
 
 
 
+**Links**
+- [ZAP Wiki - Spidering](https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsSpider)
+- [Youtube - OWASP ZAP Spidering](https://www.youtube.com/watch?v=pGCBivHNRn8)
+
 ```sh
 export T=http://localhost:3000/; 
 curl -x 127.0.0.1:8080 "${T}" \

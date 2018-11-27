@@ -3,8 +3,6 @@
 
 
 
-
-
 ### ZAP Scan Scripts
 ZAP has some scripted scans you can run against your application. We know Juice shop has a number of vulnerabilities, let's see
 what ZAP can find in the application. The ZAP project provides some docker images to make it easy to run those scans against your application.

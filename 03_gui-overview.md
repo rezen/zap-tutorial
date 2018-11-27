@@ -55,7 +55,6 @@ ZAP has tools that help you analyze your application
 ### Spider/AJAX Spider
 
 
-
 ## Panel 4 Toolbar
 The toolbar has a number of buttons to affects settings or the interface but I'm only going to touch on the aspects that are most commonly used. Over time we'll add more buttons!
 
@@ -66,6 +65,9 @@ All the detailed options for ZAPs functionality are found here! For example, if 
 
 ### Button 2 - Manage Add-ons
 Often times there is an extra bit of functionality that an addons provide that you really need! I always add the **Groovy Scripting** and **Python Scripting** addons!
+
+- [ZAP Wiki - Addons](https://github.com/zaproxy/zap-extensions/wiki)
+- [Creating Addons](https://www.owasp.org/images/3/37/GuidelineZAPExtensionsAddOns1.0.pdf)
 
 ### Button 3-7 - Breakpointing
 With breakpointing, you can intercept and modify requests in flight!

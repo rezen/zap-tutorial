@@ -89,7 +89,7 @@ data = requests.post("%s/api/Feedbacks/" % root, headers=headers, proxies=proxy,
 *Access someone else's basket.*  
 
 ##### Broken Authorization
-https://www.owasp.org/index.php/OWASP_Top_Ten_Cheat_Sheet#A2_Weak_authentication_and_session_management
+[OWASP A2](https://www.owasp.org/index.php/OWASP_Top_Ten_Cheat_Sheet#A2_Weak_authentication_and_session_management)
 
 An important part of the security of your application is ensuring that users can only see what users should see
 and not anything else. In the case of Juice Shop, people should only be able to see their basket and not others.

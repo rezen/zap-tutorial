@@ -5,6 +5,10 @@ very important to understand how to perform authenciated scans.
  ZAP has several means to authenticate to your application and keep track of authenication
 state. To start things out with testing out doing an authenticated scans, let's go ahead and add a registered user. 
 
+**Links**  
+- [ZAP Wiki - FAQ Auth](https://github.com/zaproxy/zaproxy/wiki/FAQformauth)
+- [Youtube - Authentication, Session and Users Management](https://www.youtube.com/watch?v=cR4gw-cPZOA)
+
 #### Register User
 Let's go ahead and get first test user registered and setup to test authentication. Browse to 
 `http://localhost:3000/#/register` & register a new user. For the purpose of this tutorial, use the following
