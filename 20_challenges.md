@@ -73,6 +73,7 @@ One of the pages we discovered is a contact page with the option to leave a rati
 (`http://localhost:3000/#/contact`). With this challenge, the goal is to leave feedback of zero-stores. There is no option for 0-stars presented by the interface, if you don't select at least one star you can't submit. So try to use ZAP to work around this, let's go back to the form and fill it out but don't submit.
 Before we submit, let's go back into ZAP and toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `POST http://localhost:3000/api/Feedbacks/` and also the request body `{"comment":"Comment?","rating":1,"captcha":"11","captchaId":9}`. Let's go ahead and replace the `rating` value of `1` with  `0`. Now press the blue arrow key :arrow_forward: to *Submit and contoinue to the next break point*. If you did everything correctly, in the response you should see `{"status":"success" ... "rating":0, ...}`
 
+![Challenge Zero Stars](assets/images/zap-challenge-zero-stars.gif)
 
 ```python
 captcha = requests.get("%s/rest/captcha/" % root, proxies=proxy, verify=False, headers=headers).json()
@@ -104,6 +105,12 @@ need to click. This will bring up the **Fuzzer** dialog with which you can set o
 zap.urlopen("%s/rest/basket/1" % root)
 zap.urlopen("%s/rest/basket/2" % root)
 ```
+![Challenge Zero Stars](assets/images/zap-challenge-basket.gif)
+
+
+**Links**  
+- [ZAP Fuzzer wiki](https://github.com/zaproxy/zap-core-help/wiki/HelpAddonsFuzzConcepts)
+- [Youtube - ZAP Fuzzing](https://www.youtube.com/watch?v=uSfGeyJKIVA)
 
 ### Challenge - Five-Star Feedback
 *Get rid of all 5-star customer feedback.*  
@@ -130,69 +137,7 @@ see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and 
 `{"message":"Awesome!","author":"Anonymous"}`. Let's go ahead and replace the message attribute with  
 `<script>alert(\"XSS\")</script>`. Now press the blue arrow key to *Submit and continue to the next  break point*
 
-```js
-// Logging with the script name is super helpful!
-function logger() {
-  print('[' + this['zap.script.name'] + '] ' + arguments[0]);
-}
-
-var Control           = Java.type('org.parosproxy.paros.control.Control')
-var ExtensionSelenium = Java.type('org.zaproxy.zap.extension.selenium.ExtensionSelenium');
-var Thread            = Java.type('java.lang.Thread');
-var WebDriver         = Java.type('org.openqa.selenium.WebDriver');
-
-function getAll(re, body) {
-  var match;
-  var matches = []; 
-  do {
-    match = re.exec(body);
-    if (match) {
-        matches.push(match);
-    }
-  } while (match);
-  return matches;
-}
-
-function invokeWith(msg) {
-  var selenium = Control.getSingleton().getExtensionLoader().getExtension(ExtensionSelenium.class);
-  var driver   = selenium.getWebDriverProxyingViaZAP(1, 'firefox');
-  var url = msg.getRequestHeader().getURI();
-  var root = url.getScheme() + '://' + url.getHost();
-  if (url.getPort() != 80 && url.getPort() != 443) {
-    root += ':' + url.getPort();
-  }
-  var body = msg.getResponseBody().toString();
-  // For capturing angular.js router urls
-  var regexWhen = /\.when\(["']([^"']+)["']/g;
-  // For capturing angular.js AJAX requests
-  var regexGet = /\.get\(["']([^"']+)["']/g;
-
-  var matches = getAll(regexWhen, body);
-  var links = []
-
-  for (var i in matches) {
-    var link = root + '/#' +  matches[i][1];
-    if (links.indexOf(link) !== -1) {
-      continue;
-    }
-    links.push(link);
-  }
-     
-  matches = getAll(regexGet, body);
-
-  for (var i in matches) {
-    var link = root +  matches[i][1];
-    if (links.indexOf(link) !== -1) {
-      continue;
-    }
-    links.push(link);
-  }
-
-  for (var i in links) {
-    driver.get(links[i]);
-    Thread.sleep(1000);
-  }
-
-  driver.quit();
-}
-```
+**Links** 
+- [ZAP Blog - Breakpoints Tutorial](https://zaproxy.blogspot.com/2015/12/zap-newsletter-2015-december.html#Tutorial)
+- [Youtube - ZAP Breakpoints Part 1](https://www.youtube.com/watch?v=b6IR2KgiOcw)
+- [Youtube - ZAP Breakpoints Part 2](https://www.youtube.com/watch?v=H2tKdwMcKnk)
