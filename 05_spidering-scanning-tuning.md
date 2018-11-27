@@ -50,6 +50,8 @@ Here are a few of the many attacks that ZAP will run against your app with activ
 - 
 (For the nitty gritty of active scans [check here](https://github.com/zaproxy/zap-extensions/tree/master/src/org/zaproxy/zap/extension/ascanrules) to read the source)
 
+![Active Scan](assets/images/zap-active-scan.gif)
+
 ##### Policy Tuning
 The thing that controls Active Scans are Scan Policies. Scan policies control whether a series check is run and with what
 strength. For example, there is an active scan check for checking SQL Injections for Oracle. We know the application database is not Oracle, so we can run this check. We also know our application has no sort of SOAP functionality, so 
