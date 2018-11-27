@@ -17,7 +17,7 @@ check out all the options.
 ## Goals
 The primary goal of this post is to script up scanning your application with ZAP. You will learn the methods for customizing
 the  `zap-full-scan.py` which you can then apply to your application! Through the journey towards our goal, we  will touch on 
-some additional topics necccery to reach our goal. 
+some additional topics necessary to reach our goal. 
 
 - Learn about some ZAP Basics
   - Interface overview
@@ -35,9 +35,9 @@ some additional topics necccery to reach our goal.
   - Automate security scans against Juice Shop
   - Customize the baseline scan using hooks
 
-The end goal of this excersize is go use the ZAP GUI to setup the basic configurations needed to run an authenticated scan.
+The end goal of this exercise is go use the ZAP GUI to setup the basic configurations needed to run an authenticated scan.
 We'll touch on some gotchas with the scans and use the ZAP hooks to configure and enhance the scans. Throughout 
-this tutorial we will be assumming you are running Juice Shop in docker `localhost:3000` but if not, substitute the URL
+this tutorial we will be assuming you are running Juice Shop in docker `localhost:3000` but if not, substitute the URL
 with your url.
 
 **Links**

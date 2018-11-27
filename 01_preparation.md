@@ -19,7 +19,7 @@ Getting ZAP installed is pretty straight forward, download the appropriate [inst
 
 ### Juice Shop
 You will need need to a running instance of [OWASP Juice Shop](https://github.com/bkimminich/juice-shop). I recommend running
-it locally using Docker! For the purpose of this tutorial, it will be running in docker with all relevant commands asumming 
+it locally using Docker! For the purpose of this tutorial, it will be running in docker with all relevant commands assuming 
 that is the situation.
 
 `docker run --net=host --rm -p 3000:3000 bkimminich/juice-shop`
@@ -27,7 +27,7 @@ that is the situation.
 ### Firing up ZAP
 If you are using Windows or Mac you can use the ZAP icon to get it started. If you are using linux, `zap.sh` should be in your 
 PATH, so you can call that to start things up. You can also run the ZAP GUI through Docker, but the instructions for that are not 
-includeds.
+included.
 
 ### Set up Browser
 *Optional*  

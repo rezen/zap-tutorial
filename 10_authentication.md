@@ -1,8 +1,8 @@
 ### Adding Authentication
 The application has a portion of functionality that is available only to logged in users. To fully test out your application, you need
-to also test out the logic as a logged in user. Some applications have features exposed without authenitcation, so it's 
-very important to understand how to perform authenciated scans.
- ZAP has several means to authenticate to your application and keep track of authenication
+to also test out the logic as a logged in user. Some applications have features exposed without authentication, so it's 
+very important to understand how to perform authenticated scans.
+ ZAP has several means to authenticate to your application and keep track of authentication
 state. To start things out with testing out doing an authenticated scans, let's go ahead and add a registered user. 
 
 **Links**  
@@ -25,7 +25,7 @@ With the information you just registered with, browse to the login url `http://l
 the request will be added to the **History** in ZAP. Search for the POST that included the login information, you should
 find a POST request to `http://localhost:3000/rest/user/login`. Right click (or control click) that request in the history
 and in the context menu that prompted click, Right click (or control click) `Flag as Context > Default Context : JSON-based Auth Login Request` (if you only see the option for `Form-based`... that means your version of ZAP is out of date). The will bring up the Context Authentication editor settings.  You will notice the post data with 
-the authentication information as well as a couple parameters for selecting Username & Password. Go ahead and set the username and password parameters to the correspending JSON
+the authentication information as well as a couple parameters for selecting Username & Password. Go ahead and set the username and password parameters to the corresponding JSON
 attributes.
 
 ![Add Authentication to Context](assets/images/zap-auth-context.gif)
@@ -59,7 +59,7 @@ add to or augment it's functionality.
 
 ##### Adding JavaScript Support
 Out of the box, ZAP doesn't support JavaScript as a scripting engine, so you need to add it.
-ZAP has an *Add-on Marketplace* where we can add support for additioanl scripting engines.
+ZAP has an *Add-on Marketplace* where we can add support for additional scripting engines.
  There is an icon with a red blue green & blue box stacked, if you click that it will bring up
  the marketplace modal. After it pops up, switch to the *Marketplace* tab and search for the `Script Console` and install it. 
 

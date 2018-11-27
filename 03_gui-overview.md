@@ -1,5 +1,7 @@
 # GUI Overview
-We are going to touch on the basics of the GUI to help you get more familiar with ZAP. Below you can see the GUI with 4 panels highlighted with more details below!
+We are going to touch on the basics of the GUI to help you get more familiar with ZAP. To enhance the functionality
+of your scans, you need to start off in the GUI and configure "all the things". To help you do that, we'll give an 
+overview of ZAP's functionality from the GUI perspective. Below you can see the GUI with 4 panels highlighted with more details below!
 
 ![Main overview](assets/images/zap-gui-main.jpg)
 
@@ -23,11 +25,12 @@ This panel enables you to view **Request** & **Response** headers and body. When
 #### Contexts
 
 #### Sites
-All requests proxied are used to be help construct a site tree. This helps you visualize the hierachy of your site. 
+All requests proxied are used to be help construct a site tree. This helps you visualize the hierarchy of your site. 
 
 
 ### Scripts
-ZAP has a powerful scripting engine that allows you to modify/enhance different aspects of ZAP interactions. For example, you can modify the headers of every request 
+ZAP has a powerful scripting engine that allows you to modify/enhance different aspects of ZAP's interactions with your 
+web service.. For example, you can modify the headers of every request using scripts!
 
 ## Panel 3 Tools
 ZAP has tools that help you analyze your application
@@ -52,8 +55,6 @@ ZAP has tools that help you analyze your application
 - Spider
 - Zest Results
 
-### Spider/AJAX Spider
-
 
 ## Panel 4 Toolbar
 The toolbar has a number of buttons to affects settings or the interface but I'm only going to touch on the aspects that are most commonly used. Over time we'll add more buttons!
@@ -76,4 +77,4 @@ With breakpointing, you can intercept and modify requests in flight!
 - https://www.youtube.com/watch?v=b6IR2KgiOcw
 
 ### Button 8 - Launch Browser
-You can launche a browser pre-configured with a blank profile that is proxying through ZAP! This ensures you have a browser with a clean state (so you don't proxy your personal traffic!) with all the settings you need such as the ZAP CA configured.
+You can launch a browser pre-configured with a blank profile that is proxying through ZAP! This ensures you have a browser with a clean state (so you don't proxy your personal traffic!) with all the settings you need such as the ZAP CA configured.

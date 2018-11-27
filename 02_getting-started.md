@@ -17,7 +17,7 @@ docker run -e JAVA_OPTS='-Xmx4g' -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-week
   -m 1 \
   -j \
   -r testreport.html \
-  -z '-config scanner.maxRuleDurationInMins=1 -config scanner.maxScanDurationInMins=10'
+  -z '-config scanner.maxRuleDurationInMins=1 -config scanner.maxScanDurationInMins=1'
 ```
 *Added a couple config items to speed things up*
 
@@ -40,13 +40,13 @@ docker exec $(docker ps | grep 'juice-shop' | cut -d ' ' -f1) \
 
 
 
-You'll notice there has been none - this is a massive gap in the attack surface. Tradionally, security scanners can read the HTML body and 
-identify forms which are submitted and then testing with malicious payload. In this instance, that sort of model does not work. Esentially
+You'll notice there has been none - this is a massive gap in the attack surface. Traditionally, security scanners can read the HTML body and 
+identify forms which are submitted and then testing with malicious payload. In this instance, that sort of model does not work. Essentially
 the entire application is rendered in the browser, with non-traditional forms and ways of interacting with the server with a REST model.
 
 The good news is we can fill in this gap!
 
 The reality is, every application is custom with enough nuance that an application scanner will struggle to understand
 all those details. To have more effective scans, you really need to tailor them to your application. Spending the extra
-time to customize the scanner behaviour to match your application can make a night and day difference.
+time to customize the scanner behavior to match your application can make a night and day difference.
 

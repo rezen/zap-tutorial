@@ -36,7 +36,7 @@ the browser that started you can see ZAP interacting with the application. It do
 have been discovered. In the **Sites** tab if you drill down into some of the urls such as `rest`, you will notice all these pages have a red spider icon 
 next to them, indicating they were found by the AJAX Spider.
 
-![Spider Adanced](assets/images/zap-gui-start-ajax-spider.gif)
+![Spider Advanced](assets/images/zap-gui-start-ajax-spider.gif)
 
 
 #### Active Scan
@@ -61,5 +61,5 @@ The thing that controls Active Scans are Scan Policies. Scan policies control wh
 strength. For example, there is an active scan check for checking SQL Injections for Oracle. We know the application database is not Oracle, so we can run this check. We also know our application has no sort of SOAP functionality, so 
 we can remove those checks as well. 
 
-For eaxmple, with the plugin *SQL Injections*, if the *Strength* is set to low, only 4 requests will be made against a node whereas if you set the 
+For example, with the plugin *SQL Injections*, if the *Strength* is set to low, only 4 requests will be made against a node whereas if you set the 
 strength to *Insane*, the max number of requests jumps to 100!
