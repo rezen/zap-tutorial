@@ -3,11 +3,9 @@ An important part of application security is getting an understanding of the bre
 interesting bits to see what you can find.
 Once we have the context setup, we can go ahead and test the spider out. Let's go ahead and configure the max time to be 1 minute, we don't want this to run forever, just a quick scan. You'll see it found some additional static assets but nothing terribly helpful. Since this is a single page application, there isn't much content generated server side for the spider to crawl. Most of the application interface is generated client side by angularjs.  In this case we could easily use a quick bash script to achieve similar affects.
 
-![Spider Start](assets/images/zap-spider-start.jpg)
+![Spider Start](assets/images/zap-spider.gif)
 
 
-![Spider Scope](assets/images/zap-spider-scope.png)
-![Spider Adanced](assets/images/zap-spider-advanced.png)
 
 ```sh
 export T=http://localhost:3000/; 
