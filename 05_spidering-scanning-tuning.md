@@ -9,8 +9,11 @@ You'll see it found some additional static assets but nothing terribly helpful. 
 
 ```sh
 # Quickly scrape/visit links & resources
+# Set target 
 export T=http://localhost:3000/; 
-export HTTP_PROXY=127.0.0.1:8080; # Proxy through ZAP
+# Proxy through ZAP
+export HTTP_PROXY=127.0.0.1:8080; 
+
 curl "${T}" \
   | grep 'href' \
   | cut -d '"' -f 2 \
