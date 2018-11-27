@@ -1,30 +1,33 @@
 ### Spidering
 An important part of application security is getting an understanding of the breadth of the application. If you are not familiar with spidering, it's the process of going through the application, looking at things like `href` tags and other 
 interesting bits to see what you can find.
-Once we have the context setup, we can go ahead and test the spider out. Let's go ahead and configure the max time to be 1 minute, we don't want this to run forever, just a quick scan. You'll see it found some additional static assets but nothing terribly helpful. Since this is a single page application, there isn't much content generated server side for the spider to crawl. Most of the application interface is generated client side by angularjs.  In this case we could easily use a quick bash script to achieve similar affects.
+Once we have the context setup, we can go ahead and test the spider out. Let's go ahead and configure the max time to be 1 minute, we don't want this to run forever, just a quick scan. 
 
 ![Spider Start](assets/images/zap-spider.gif)
 
+You'll see it found some additional static assets but nothing terribly helpful. Since this is a single page application, there isn't much content generated server side for the spider to crawl. Most of the application interface is generated client side by angularjs.  In this case we could easily use a quick bash script to achieve similar affects.
 
+```sh
+# Quickly scrape/visit links & resources
+export T=http://localhost:3000/; 
+export HTTP_PROXY=127.0.0.1:8080; # Proxy through ZAP
+curl "${T}" \
+  | grep 'href' \
+  | cut -d '"' -f 2 \
+  | xargs -I{} -sIXGET "${T}{}"
+
+curl "${T}" \
+  | grep 'src' \
+  | cut -d '"' -f 2 \
+  | xargs -I{} curl  -sIXGET "${T}{}"
+```
+
+So the question becomes, how do you crawl applications that are primarily rendered client side? Luckily ZAP has an extension to address this, the AJAX Spider!
 
 **Links**
 - [ZAP Wiki - Spidering](https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsSpider)
 - [Youtube - OWASP ZAP Spidering](https://www.youtube.com/watch?v=pGCBivHNRn8)
 
-```sh
-export T=http://localhost:3000/; 
-curl -x 127.0.0.1:8080 "${T}" \
-  | grep 'src' \
-  | cut -d '"' -f 2 \
-  | xargs -I{} curl  -x 127.0.0.1:8080 -sIXGET "${T}{}"
-
-curl -x 127.0.0.1:8080 "${T}" \
-  | grep 'href' \
-  | cut -d '"' -f 2 \
-  | xargs -I{} curl -x 127.0.0.1:8080 -sIXGET "${T}{}"
-```
-
-So the question becomes, how do you crawl applications that are primarily rendered client side? Luckily ZAP has an extenion to address this, the AJAX Spider!
 
 #### AJAX Spider
 To kick off the AJAX Spider, let's go back to the **Sites** tab and then right click on the request labeled `http://localhost:3000`. 
