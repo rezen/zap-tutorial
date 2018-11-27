@@ -63,6 +63,9 @@ provided and see whats happens.  In ZAP you'll notice a request for `/rest/produ
 
 `http://localhost:3000/#/search?q=<script>alert("XSS")</script>`
 
+![Challenge XSS](assets/images/zap-challenge-xss-1.gif)
+
+
 ##### Scripting
 To reproduce this issue, we need to use a real browser!
 
