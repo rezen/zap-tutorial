@@ -14,3 +14,8 @@ popped up `Include in Context > Default Context`. It will bring up the context e
 
 
 ![Include in Context](assets/images/zap-include-context.gif)
+
+
+You can also specify what technology your application uses which affects what checks do perform or skip for the **Active Scan**.
+
+![Specify Context Tech](assets/images/zap-context-tech.gif)
