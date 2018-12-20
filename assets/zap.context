@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+    <context>
+        <name>Default Context</name>
+        <desc/>
+        <inscope>true</inscope>
+        <incregexes>http://localhost:3000.*</incregexes>
+        <tech>
+            <include>Db.MongoDB</include>
+            <include>Db.SQLite</include>
+            <include>Language.XML</include>
+            <include>OS.Linux</include>
+            <include>SCM</include>
+            <include>SCM.Git</include>
+            <include>SCM.SVN</include>
+            <exclude>Db</exclude>
+            <exclude>Db.CouchDB</exclude>
+            <exclude>Db.Firebird</exclude>
+            <exclude>Db.HypersonicSQL</exclude>
+            <exclude>Db.IBM DB2</exclude>
+            <exclude>Db.Microsoft Access</exclude>
+            <exclude>Db.Microsoft SQL Server</exclude>
+            <exclude>Db.MySQL</exclude>
+            <exclude>Db.Oracle</exclude>
+            <exclude>Db.PostgreSQL</exclude>
+            <exclude>Db.SAP MaxDB</exclude>
+            <exclude>Db.Sybase</exclude>
+            <exclude>Language</exclude>
+            <exclude>Language.ASP</exclude>
+            <exclude>Language.C</exclude>
+            <exclude>Language.PHP</exclude>
+            <exclude>OS</exclude>
+            <exclude>OS.MacOS</exclude>
+            <exclude>OS.Windows</exclude>
+            <exclude>WS</exclude>
+            <exclude>WS.Apache</exclude>
+            <exclude>WS.IIS</exclude>
+            <exclude>WS.Tomcat</exclude>
+        </tech>
+        <urlparser>
+            <class>org.zaproxy.zap.model.StandardParameterParser</class>
+            <config>{"kvps":"&amp;","kvs":"=","struct":[]}</config>
+        </urlparser>
+        <postparser>
+            <class>org.zaproxy.zap.model.StandardParameterParser</class>
+            <config>{"kvps":"&amp;","kvs":"=","struct":[]}</config>
+        </postparser>
+        <authentication>
+            <type>5</type>
+            <loggedout>\Q{"user":{}}\E</loggedout>
+            <form>
+                <loginurl>http://localhost:3000/rest/user/login</loginurl>
+                <loginbody>{"email":"{%username%}","password":"{%password%}"}</loginbody>
+            </form>
+        </authentication>
+        <users>
+            <user>3;true;dGVzdEB0ZXN0LmNvbQ==;5;dGVzdEB0ZXN0LmNvbQ==~dGVzdHRlc3Q=~</user>
+        </users>
+        <forceduser>3</forceduser>
+        <session>
+            <type>0</type>
+        </session>
+        <authorization>
+            <type>0</type>
+            <basic>
+                <header/>
+                <body/>
+                <logic>AND</logic>
+                <code>-1</code>
+            </basic>
+        </authorization>
+    </context>
+</configuration>
