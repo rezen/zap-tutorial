@@ -5,6 +5,14 @@
 
 *If you've never done Juice Shop be, warned, this section will give away answers for the easy section*  
 Now that we've covered some of the foundational aspects of ZAP, let's take some time to focus on Juice Shop, and then figure out how best to automate testing of Juice Shop. 
+We'll take a look at each vulnerability and then figure out how to automate testing it. 
+
+
+## Scripting
+For the code in each of the challenges below we'll be using Selenium to control the browser, so if you see `browser` 
+you'll know that it's referring to the Selenium driver. If you see `session` that is referring to an 
+instance of `requests` configured with the correct headers & proxy. If you see `target`, you know that 
+variable is referring to the target url of the app.
 
 ![Juice Shop Scoreboard](assets/images/juice-shop-score-board.png)
 
@@ -19,6 +27,9 @@ completing the following challenges to give you a good understanding of how to a
 - Basket Access
 - Five-Star Feedback
 
+
+
+
 #### Challenge - Admin Section
 *Access the administration section of the store.*  
 At the bottom of  ZAP panel there is a tab for **Search** - go ahead and search for `administration`. The first result in 
@@ -30,12 +41,16 @@ Using this insight, let's go ahead and navigate to `http://localhost:3000/#/admi
 You'll notice this is a page in the browser, you cannot curl that same url and get the same response.
 
 ##### Scripting
+This page is generated client side, so we need to use the browser to trigger it.
+```python
+browser.get('%s/#/administration' % target)
+```
 
 #### Challenge XSS Tier 0
 *Perform a reflected XSS attack with `<script>alert("XSS")</script>`.*  
 
 Stepping through the site, there are a number of inputs we can try inputting an XSS. A few places with inputs  without
-registering you can try out are.
+registering you can try out are. Going through this process you will actually discover another XSS!
 - In the search bar
 - Contact Us Page `http://localhost:3000/#/contact`
 - `http://localhost:3000/#/search`
@@ -47,12 +62,15 @@ After you login, there are a few more pages
 - `http://localhost:3000/#/track-order`
 - `http://localhost:3000/#/recycle`
 
-https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
 
 `http://localhost:3000/#/track-result?id=%3Cscript%3Ealert(%22XSS%22)%3C%2Fscript%3E`
 
 ##### Scripting
-
+Since these page does not require authentication, it is really easy to trigger the XSS! We'll use the browser for this 
+challenge, since we are triggering an XSS.
+```python
+browser.get('%s/#/track-result?id=<script>alert("XSS")</script>' % target)
+```
 
 #### Challenge XSS Tier 1
 *Perform a DOM XSS attack with `<script>alert("XSS")</script>`.*  
@@ -67,25 +85,36 @@ provided and see whats happens.  In ZAP you'll notice a request for `/rest/produ
 
 
 ##### Scripting
-To reproduce this issue, we need to use a real browser!
+To reproduce this issue, we need to use a real browser - the classification of the XSS hints at that!
+
+```python
+browser.get('%s/#/search?q=<script>alert("XSS")</script>' % target)
+```
+
 
 #### Challenge - Zero Stars
 *Give a devastating zero-star feedback to the store.*     
 
 One of the pages we discovered is a contact page with the option to leave a rating 
 (`http://localhost:3000/#/contact`). With this challenge, the goal is to leave feedback of zero-stores. There is no option for 0-stars presented by the interface, if you don't select at least one star you can't submit. So try to use ZAP to work around this, let's go back to the form and fill it out but don't submit.
-Before we submit, let's go back into ZAP and toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `POST http://localhost:3000/api/Feedbacks/` and also the request body `{"comment":"Comment?","rating":1,"captcha":"11","captchaId":9}`. Let's go ahead and replace the `rating` value of `1` with  `0`. Now press the blue arrow key :arrow_forward: to *Submit and continue to the next break point*. If you did everything correctly, in the response you should see `{"status":"success" ... "rating":0, ...}`
+Before we submit, let's go back into ZAP and toggle the circular record button (to the right of the lightbulb) to **Break on all requests**. Now back in the browser press submit! You will notice ZAP is brought into focus and a request is in view. You should see  the request headers `POST http://localhost:3000/api/Feedbacks/` and also the request body `{"comment":"Comment?","rating":1,"captcha":"11","captchaId":9}`. Let's go ahead and replace the `rating` value of `1` with  `0`. Now press the blue arrow key :arrow_forward: to *Submit and continue to the next break point*. If you did everything correctly, in the response you should see `{"status":"success" ... "rating":0, ...}`.
 
 ![Challenge Zero Stars](assets/images/zap-challenge-zero-stars.gif)
 
+##### Scripting
+If you trying doing that some request again without a captcha, it will not go through, so for scripting
+we'll need to make sure to capture the captcha and pass on to the comment request.
+
 ```python
-captcha = requests.get("%s/rest/captcha/" % root, proxies=proxy, verify=False, headers=headers).json()
-data = requests.post("%s/api/Feedbacks/" % root, headers=headers, proxies=proxy, verify=False, data=json.dumps({
+# Get captcha for giving feedback then post feedback of 0
+captcha = session.get("%s/rest/captcha/" % target).json()
+data = session.post("%s/api/Feedbacks/" % target,  data=json.dumps({
   "comment": "Comment?",
   "rating": 0,
   "captcha": captcha["answer"],
   "captchaId": captcha["captchaId"]
 })).json()
+print(data)
 ```
 
 #### Challenge - Basket Access
@@ -104,12 +133,14 @@ After you login, Click the **Your Basket** link or navigate to `http://localhost
 you should notice a request `http://localhost:3000/rest/basket/4` ... *Right Click* (or ^ click for Mac) on the request and a context menu will pop up and then click `Open/Resend with Request editor`. Looking at the request, it looks REST ish with `4` likely the user id from the database. Let's go ahead and try changing that number to a lower one & see if we get another basket and then click *Send*. Sure enough we can access someone elses basket! Let's see how many other baskets have content. Incrementally manually is a bothersome, let's check out ZAP's **HTTP Fuzzer** to make this easy! Let's exit the `Request editor` back into the main ZAP ui. Lets go ahead and find the `rest/basket/...` request again in history and click it. In the **&rarr;Request** tab above select the number at the end of the path and then *Right Click*  on the selection. This will prompt you with another context menu with one of the options being **Fuzz**, which you 
 need to click. This will bring up the **Fuzzer** dialog with which you can set options. ON the right side you will want to *Click* the button **Payloads**, this will allow you to provide a list of values to replace the selected text with. Now *click* **Add** which will bring up another prompt. In the dropdown, select **Numberzz** (since we are iterating numbers) and then for the **To** field set a value of `20` and the increment field a value of `1`. After you add those settings, *click* the button **Generate Preview** and then *click* the button **Add** then **Ok**. After that you will be back in the main **Fuzzer** dialog, go ahead and *click* **Start Fuzzer**. Below you'll see the **Fuzzer** tab is in focus with a list of requests. 
 
-```python
-zap.urlopen("%s/rest/basket/1" % root)
-zap.urlopen("%s/rest/basket/2" % root)
-```
-![Challenge Zero Stars](assets/images/zap-challenge-basket.gif)
+![Challenge Others Baskets](assets/images/zap-challenge-basket.gif)
 
+##### Scripting
+These is one of the easiest challenges to script, iterate through some numbers and discover other baskets!
+```python
+for i in range(1, 20):
+   zap.urlopen("%s/rest/basket/%s" % (target, i))
+```
 
 **Links**  
 - [ZAP Fuzzer wiki](https://github.com/zaproxy/zap-core-help/wiki/HelpAddonsFuzzConcepts)
@@ -126,8 +157,10 @@ you found `http://localhost:3000/#/administration`, you may have noticed the rig
 with **Customer Feedback**. If you are logged in with your test user, you'll notice there is a red trash can icon on the right side of each table row. (if you are not logged in, go ahead and log in). Go ahead and click the trash icon next to the first review that has 5-stars. Back in ZAP, checking the **History** tab at the bottom and notice the requests, there is a new one - `DELETE http://localhost:3000/api/Feedbacks/1`!
 No sort of authorization check was performed, as a authenticated user you were able to 
 
+##### Scripting
+Sending a delete request is easy!
 ```python
-requests.delete("%s/api/Feedbacks/1" % root, proxies=proxy, verify=False)
+session.delete("%s/api/Feedbacks/1" % target)
 ```
 
 #### Breakpoints
@@ -144,3 +177,9 @@ see  the request headers `PUT http://localhost:3000/rest/product/1/reviews` and 
 - [ZAP Blog - Breakpoints Tutorial](https://zaproxy.blogspot.com/2015/12/zap-newsletter-2015-december.html#Tutorial)
 - [Youtube - ZAP Breakpoints Part 1](https://www.youtube.com/watch?v=b6IR2KgiOcw)
 - [Youtube - ZAP Breakpoints Part 2](https://www.youtube.com/watch?v=H2tKdwMcKnk)
+
+
+### Resources 
+- [challenges.py](challenges.py) The script for the challenges
+- https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
+

@@ -9,3 +9,4 @@
 - [Spidering Scanning Tuning](05_spidering-scanning-tuning.md)
 - [Authentication](10_authentication.md)
 - [Challenges](20_challenges.md)
+- [Putting It Together](30_putting-it-together.md)
