@@ -10,3 +10,12 @@ pieces together, so we can run the `zap-full-scan.py` fully customized with ever
 
 ## Exportingc URLs
 ![Export Context](assets/images/zap-export-urls.gif)
+
+
+```sh
+time docker run --rm -v $(pwd):/zap/wrk/:rw \
+    -t owasp/zap2docker-weekly zap-full-scan.py \
+    -d -a -j \
+    -t http://172.17.0.2:3000  \
+    --hook=/zap/wrk/hooks.py
+```

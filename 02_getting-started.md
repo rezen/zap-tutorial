@@ -28,17 +28,42 @@ curl http://localhost:3000/api/Challenges/ \
   | jq '.data[] | select(.solved==true)'
 ```
 
-Let's also check out the application logs, for how many `POST` requests have been made.
+Let's see what urls were accessed - exclude the static assets mess.
+
+```sh
+ docker exec $(docker ps | grep 'juice-shop' | cut -d ' ' -f1) \
+   find -name 'access.log*' -exec cat {} \;  \
+   | cut -d ' ' -f7 \
+   | sort \
+   | uniq \
+   | grep -v 'node_modules\|images'
+```
+
+Let's also check out the application logs, for how many non `GET` (`POST|PUT|HEAD`) requests have been made.
 
 ```sh
 docker exec $(docker ps | grep 'juice-shop' | cut -d ' ' -f1) \
   find -name 'access.log*' -exec cat {} \;\
-  | grep POST
+  | grep -v GET
+
+# If you wanna tail the access logs ...
+docker exec $(docker ps | grep 'juice-shop' | cut -d ' ' -f1) \
+  find -name 'access.log*' -exec tail -f {} \;
 ```
 
 ![Screenshot logs](assets/images/screenshot-grep-logs.png)
 
 
+```sh
+remote_port=$(docker exec $(docker ps | grep 'zap' | cut -d ' ' -f1) ps aux | egrep -o -m 1 '\-port ([0-9]+)' | cut -d' '  -f2)
+cid=$(docker ps | grep 'zap' | cut -d ' ' -f1)
+
+docker exec "$cid" \
+  curl -s http://localhost:$remote_port/JSON/core/view/urls/ | jq '.urls | length'
+
+docker exec "$cid" \
+  curl -s http://localhost:$remote_port/JSON/ascan/view/scans/ | jq
+```
 
 You'll notice there has been none - this is a massive gap in the attack surface. Traditionally, security scanners can read the HTML body and 
 identify forms which are submitted and then testing with malicious payload. In this instance, that sort of model does not work. Essentially

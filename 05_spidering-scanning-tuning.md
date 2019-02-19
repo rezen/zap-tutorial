@@ -5,6 +5,36 @@ Once we have the context setup, we can go ahead and test the spider out. Let's g
 
 ![Spider Start](assets/images/zap-spider.gif)
 
+```python
+import sys
+import time
+from zapv2 import ZAPv2
+
+if len(sys.argv) > 1:
+  target = sys.argv[1]
+else: 
+  target = "http://localhost:3000"
+
+print("Spidering target %s" % target)
+
+zap = ZAPv2()
+
+zap.spider.exclude_from_scan(".*node_modules.*")
+zap.spider.exclude_from_scan("%s/public.*" % target)
+zap.spider.exclude_from_scan("%s/i18n.*" % target)
+
+scan_id = zap.spider.scan(url=target, maxchildren=2, recurse=True, contextname=None, subtreeonly=None)
+
+time.sleep(2)
+
+while (int(zap.spider.status(scan_id)) < 100):
+  print("Spider progress " + zap.spider.status(scan_id) + "%")
+  time.sleep(2)
+
+print("Spider scan completed")
+
+```
+
 You'll see it found some additional static assets but nothing terribly helpful. Since this is a single page application, there isn't much content generated server side for the spider to crawl. Most of the application interface is generated client side by angularjs.  In this case we could easily use a quick bash script to achieve similar affects.
 
 ```sh
@@ -44,6 +74,31 @@ next to them, indicating they were found by the AJAX Spider.
 
 ![Spider Advanced](assets/images/zap-gui-start-ajax-spider.gif)
 
+
+```python
+import sys
+import time
+from zapv2 import ZAPv2
+
+if len(sys.argv) > 1:
+    target = sys.argv[1]
+else: 
+    target = "http://localhost:3000/#/"
+
+print("AJAX Spidering target %s" % target)
+
+zap = ZAPv2()
+print(zap.ajaxSpider.option_browser_id)
+print(zap.ajaxSpider.set_option_browser_id("chrome"))
+zap.ajaxSpider.set_option_max_duration("1")
+print(zap.ajaxSpider.scan(target))
+
+while (zap.ajaxSpider.status == 'running'):
+    print('Ajax Spider running, found urls: ' + zap.ajaxSpider.number_of_results)
+    time.sleep(5)
+
+print("AJAX spider scan completed "  + zap.ajaxSpider.status )
+```
 
 #### Active Scan
 The spidering we've run have checked the application in non-intrusive ways. The Active Scan functionality of ZAP 
