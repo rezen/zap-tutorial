@@ -53,6 +53,7 @@ docker exec $(docker ps | grep 'juice-shop' | cut -d ' ' -f1) \
 
 ![Screenshot logs](assets/images/screenshot-grep-logs.png)
 
+While ZAP is still running, we can check out how many urls it has found and is processing.
 
 ```sh
 remote_port=$(docker exec $(docker ps | grep 'zap' | cut -d ' ' -f1) ps aux | egrep -o -m 1 '\-port ([0-9]+)' | cut -d' '  -f2)
