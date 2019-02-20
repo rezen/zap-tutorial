@@ -31,7 +31,6 @@ def get_firefox(zap):
   profile.accept_untrusted_certs = True
   opts = FirefoxOptions()
   opts.add_argument("--headless")
-
   driver = webdriver.Firefox(proxy=proxy, executable_path=driver_bin, firefox_options=opts, firefox_profile=profile)
   return driver
 
@@ -61,6 +60,7 @@ def start_zap(port, extra_zap_params):
 
 def zap_started(zap, target):  
   print("-- ZAP started!")
+  raise Exception("-- TODO - configure bits after zap_started")
   zap.spider.exclude_from_scan("TODO")
 
 
@@ -69,18 +69,21 @@ def zap_access_target(zap, target):
 
 
 def zap_spider(zap, target):
+  raise Exception("-- TODO- configure bits for zap_spider")
   username = os.environ.get("TEST_USER", "test@test.com")
   passwd = os.environ.get("TEST_PASS", "testtest")
   return zap, target
 
 
 def zap_ajax_spider(zap, target, max_time):
+  raise Exception("-- TODO- configure bits for zap_ajax_spider")
   return zap, target, 1
 
 
 def zap_active_scan(zap, target, policy):
+  raise Exception("-- TODO- configure bits for zap_active_scan")
   return zap, target, policy
 
 
 def zap_pre_shutdown(zap):
-    pass
+  pass
