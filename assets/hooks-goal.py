@@ -218,7 +218,7 @@ def zap_active_scan(zap, target, policy):
   print("-- Ignore scanning socket.io " + zap.ascan.exclude_from_scan("%s/socket.io.*" % target))
 
   skippable_scanners = list(set([
-    '41', '43', '0', '7', '90020', '40032',
+    '41', '43', '0', '7', '90020', '40032', '40026',
     '10029', '10032', '10035', '10040', '10045', '10046', 
     '10047', '10049', '10050', '10051', '10052', '2011', '2',
     '3192', '10053', '10056', '10057', '10058', '10061', '10095',
@@ -237,7 +237,7 @@ def zap_active_scan(zap, target, policy):
   for id in sql_scanners:
     print(("-- Upping attack strength for id=%s " % id) + zap.ascan.set_scanner_attack_strength(id, "HIGH", policy))
   
-  # do_scan(zap, target + '/rest/user/login')
+  do_scan(zap, target + '/rest/user/login')
   # print("-- Importing policy " +   zap.ascan.import_scan_policy('/zap/wrk/sample.policy'))
 
   for id in sql_scanners:
@@ -257,7 +257,7 @@ def zap_active_scan(zap, target, policy):
 
   # Increase the amount of threads if local target
   if "172." in target or "127." in target or "192." in target:
-    new_threads = "10"
+    new_threads = "8"
     was_threads = zap.ascan.option_thread_per_host
     up_threads = zap.ascan.set_option_thread_per_host(new_threads)
     print("-- Upping threads per host from " + was_threads + " to " + new_threads + " " +  up_threads)
