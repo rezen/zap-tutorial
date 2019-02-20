@@ -141,11 +141,6 @@ def zap_started(zap, target):
     "%s/css.*" % target,
   ]
 
-  print("-- Ignore scanning private " + zap.ascan.exclude_from_scan("%s/private.*" % target))  
-  print("-- Ignore scanning dist " + zap.ascan.exclude_from_scan("%s/dist.*" % target))  
-  print("-- Ignore scanning ftp " + zap.ascan.exclude_from_scan("%s/ftp.*" % target))
-  print("-- Ignore scanning socket.io " + zap.ascan.exclude_from_scan("%s/socket.io.*" % target))
-
   for endpoint in ignore:
     print(("-- Ignore spider %s " % endpoint) +  zap.spider.exclude_from_scan(endpoint))
     print(("-- Ignore scanning %s " % endpoint) + zap.ascan.exclude_from_scan(endpoint))
@@ -216,7 +211,12 @@ def zap_ajax_spider(zap, target, max_time):
 def zap_active_scan(zap, target, policy):
   # zap.ascan.disable_all_scanners()
   # zap.ascan.enable_scanners([], scanpolicyname=policy)
-  print(zap.ascan.policies(scanpolicyname=policy))
+
+  print("-- Ignore scanning private " + zap.ascan.exclude_from_scan("%s/private.*" % target))  
+  print("-- Ignore scanning dist " + zap.ascan.exclude_from_scan("%s/dist.*" % target))  
+  print("-- Ignore scanning ftp " + zap.ascan.exclude_from_scan("%s/ftp.*" % target))
+  print("-- Ignore scanning socket.io " + zap.ascan.exclude_from_scan("%s/socket.io.*" % target))
+
   skippable_scanners = list(set([
     '41', '43', '0', '7', '90020', '40032',
     '10029', '10032', '10035', '10040', '10045', '10046', 
@@ -238,6 +238,7 @@ def zap_active_scan(zap, target, policy):
     print(("-- Upping attack strength for id=%s " % id) + zap.ascan.set_scanner_attack_strength(id, "HIGH", policy))
   
   # do_scan(zap, target + '/rest/user/login')
+  # print("-- Importing policy " +   zap.ascan.import_scan_policy('/zap/wrk/sample.policy'))
 
   for id in sql_scanners:
     print(("-- Setting normal attack strength for id=%s " % id) + zap.ascan.set_scanner_attack_strength(id, "DEFAULT", policy))
