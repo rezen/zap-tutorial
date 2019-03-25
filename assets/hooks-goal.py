@@ -1,3 +1,12 @@
+"""
+This is an example of a tuned scan against OWASP Juice Shop using 
+hooks in ZAP *-scan.py scripts
+
+time docker run --rm -v $(pwd):/zap/wrk/:rw \
+  -t owasp/zap2docker-weekly zap-full-scan.py \
+  -d -t http://172.17.0.2:3000 -a -m 1\
+  -j --hook=/zap/wrk/hooks-goal.py
+"""
 import time
 import re
 from os.path import expanduser
@@ -57,6 +66,8 @@ def get_firefox(zap):
   })
   profile = webdriver.FirefoxProfile()
   profile.accept_untrusted_certs = True
+  profile.set_preference("browser.startup.homepage_override.mstone", "ignore")
+  profile.set_preference("startup.homepage_welcome_url.additional", "about:blank")
   opts = FirefoxOptions()
   opts.add_argument("--headless")
 
