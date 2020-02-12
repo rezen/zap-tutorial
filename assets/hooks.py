@@ -60,9 +60,16 @@ def start_zap(port, extra_zap_params):
 
 def zap_started(zap, target):  
   print("-- ZAP started!")
-  raise Exception("-- TODO - configure bits after zap_started")
-  zap.spider.exclude_from_scan("TODO")
+  ignore = [
+    ".*node_modules.*",
+    "%s/public.*" % target,
+    "%s/i18n.*" % target,
+    "%s/css.*" % target,
+  ]
 
+  for endpoint in ignore:
+    print(("-- Ignore spider %s " % endpoint) +  zap.spider.exclude_from_scan(endpoint))
+    print(("-- Ignore scanning %s " % endpoint) + zap.ascan.exclude_from_scan(endpoint))
 
 def zap_access_target(zap, target):
   return zap, target
@@ -74,10 +81,9 @@ def zap_spider(zap, target):
   passwd = os.environ.get("TEST_PASS", "testtest")
   return zap, target
 
-
 def zap_ajax_spider(zap, target, max_time):
   raise Exception("-- TODO- configure bits for zap_ajax_spider")
-  return zap, target, 1
+  return zap, target + "#/administration", 1
 
 
 def zap_active_scan(zap, target, policy):

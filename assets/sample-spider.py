@@ -11,14 +11,12 @@ print("Spidering target %s" % target)
 
 zap = ZAPv2()
 
-"""
 zap.spider.exclude_from_scan(".*/node_modules/.*")
 zap.spider.exclude_from_scan(".*/css/.*")
 zap.spider.exclude_from_scan("%s/public/.*" % target)
 zap.spider.exclude_from_scan("%s/dist/.*" % target)
 zap.spider.exclude_from_scan("%s/private/.*" % target)
 zap.spider.exclude_from_scan("%s/i18n/.*" % target)
-"""
 
 scan_id = zap.spider.scan(url=target)
 time.sleep(0.1)
